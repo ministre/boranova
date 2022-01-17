@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+
+  db:
+    container_name: boranova_db
+    image: postgres:14-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./env/postgres.dev.env
+    networks:
+      - boranova
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: boranova_pgadmin
+    image: dpage/pgadmin4:6.4
+    volumes:
+      - ./pgadmin4/servers.json:/pgadmin4/servers.json
+      - ./env/pgpass:/pgpass
+    expose:
+      - "5050"
+    env_file:
+      - ./env/pgadmin4.dev.env
+    depends_on:
+      - db
+    networks:
+      - boranova
+      - traefik
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.pgadmin-redmine-http.entrypoints=web"
+      - "traefik.http.routers.pgadmin-redmine-http.rule=Host(`pgadmin.boranova.ru`)"
+      - "traefik.http.routers.pgadmin-redmine-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.pgadmin-redmine-https.entrypoints=websecure"
+      - "traefik.http.routers.pgadmin-redmine-https.rule=Host(`pgadmin.boranova.ru`)"
+      - "traefik.http.routers.pgadmin-redmine-https.tls=true"
+      - "traefik.http.routers.pgadmin-redmine-https.tls.certresolver=letsEncrypt"
+      - "traefik.http.services.pgadmin-redmine-service.loadbalancer.server.port=5050"
+
+  app:
+    container_name: boranova_app
+    build: ./app
+    command: gunicorn boranova.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static:/home/app/web/static
+      - media:/home/app/web/media
+    expose:
+      - "8000"
+    env_file:
+      - ./env/django.dev.env
+    depends_on:
+      - db
+    networks:
+      - boranova
+      - traefik
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.boranova-http.entrypoints=web"
+      - "traefik.http.routers.boranova-http.rule=Host(`boranova.ru`)"
+      - "traefik.http.routers.boranova-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.boranova-https.entrypoints=websecure"
+      - "traefik.http.routers.boranova-https.rule=Host(`boranova.ru`)"
+      - "traefik.http.routers.boranova-https.tls=true"
+      - "traefik.http.routers.boranova-https.tls.certresolver=letsEncrypt"
+      - "traefik.http.services.boranova-service.loadbalancer.server.port=8000"
+
+volumes:
+  postgres:
+  static:
+  media:
+
+networks:
+  boranova:
+  traefik:
+    external: true

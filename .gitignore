@@ -1,0 +1,19 @@
+/env/django.prod.env
+/env/postgres.prod.env
+/env/pgadmin4.prod.env
+
+.idea
+/app/venv/
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+### Django ###
+*.log
+*.pot
+*.pyc
