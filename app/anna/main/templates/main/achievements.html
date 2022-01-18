@@ -1,0 +1,23 @@
+{% extends "main/wrapper.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<article class="grid-container">
+    <div class="row column text-left">
+        <p>Воспитанники т/о "Палитра" регулярно являются участниками международных, всероссийских и муниципальных конкурсов детского творчества.</p>
+        <p>Наши достижения с 2016 - 2021 гг.:</p>
+        <p>&nbsp;</p>
+    </div>
+</article>
+
+<div class="row column">
+    <ul class="vertical medium-horizontal menu expanded text-center">
+        {% for c in cs %}
+        <li><div class="stat">{{ c.count }}</div><span>{{ c.name }}</span></li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

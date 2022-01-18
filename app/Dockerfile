@@ -47,7 +47,7 @@ RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
 RUN chmod +x  $APP_HOME/entrypoint.sh
 
 # copy project
-COPY ./boranova $APP_HOME
+COPY ./anna $APP_HOME
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME

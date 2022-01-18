@@ -1,0 +1,35 @@
+{% extends "main/wrapper.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Vertical -->
+<article class="grid-container">
+  <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
+    {% for p in ps %}
+    {% if p.small_photo.width < p.small_photo.height %}
+    <div class="cell">
+      <a href="{{ p.big_photo.url }}"><img class="thumbnail" src="{{ p.small_photo.url }}"></a>
+      <h5>{% if p.desc %}{{ p.desc }}{% endif %}</h5>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</article>
+
+<!-- Horizontal -->
+<article class="grid-container">
+  <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
+    {% for p in ps %}
+    {% if p.small_photo.width > p.small_photo.height %}
+    <div class="cell">
+      <a href="{{ p.big_photo.url }}"><img class="thumbnail" src="{{ p.small_photo.url }}"></a>
+      <h5>{% if p.desc %}{{ p.desc }}{% endif %}</h5>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</article>
+
+{% endblock %}

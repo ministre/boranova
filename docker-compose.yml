@@ -45,9 +45,9 @@ services:
       - "traefik.http.services.pgadmin-redmine-service.loadbalancer.server.port=5050"
 
   app:
-    container_name: boranova_app
+    container_name: anna_app
     build: ./app
-    command: gunicorn boranova.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn anna.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static:/home/app/web/static
       - media:/home/app/web/media
@@ -73,6 +73,31 @@ services:
       - "traefik.http.routers.boranova-https.tls=true"
       - "traefik.http.routers.boranova-https.tls.certresolver=letsEncrypt"
       - "traefik.http.services.boranova-service.loadbalancer.server.port=8000"
+
+  nginx:
+    container_name: boranova_nginx
+    build: ./nginx
+    volumes:
+      - static:/home/app/web/static
+      - media:/home/app/web/media
+    expose:
+      - "80"
+    networks:
+      - traefik
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.boranova-nginx-http.entrypoints=web"
+      - "traefik.http.routers.boranova-nginx-http.rule=Host(`boranova.ru`) && PathPrefix(`/media/`)"
+      - "traefik.http.routers.boranova-nginx-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.boranova-nginx-https.entrypoints=websecure"
+      - "traefik.http.routers.boranova-nginx-https.rule=Host(`boranova.ru`) && PathPrefix(`/media/`)"
+      - "traefik.http.routers.boranova-nginx-https.tls=true"
+      - "traefik.http.routers.boranova-nginx-https.tls.certresolver=letsEncrypt"
+      - "traefik.http.services.boranova-nginx-service.loadbalancer.server.port=80"
+
 
 volumes:
   postgres:

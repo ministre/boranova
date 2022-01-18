@@ -1,0 +1,21 @@
+{% extends "main/wrapper.html" %}
+
+{% load static %}
+
+{% block content %}
+
+{% for v in vs %}
+<div class="media-object stack-for-small">
+  <div class="media-object-section">
+    <div class="thumbnail">
+      <iframe width="480" height="270" src="https://www.youtube.com/embed/{{ v.youtube_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+  <div class="media-object-section">
+    <h4>{{ v.name }}</h4>
+    <p><a href="https://youtu.be/{{ v.youtube_id }}">https://youtu.be/{{ v.youtube_id }}</a></p>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

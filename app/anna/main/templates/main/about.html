@@ -1,0 +1,27 @@
+{% extends "main/wrapper.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<article class="grid-container">
+    <div class="grid-x grid-margin-x">
+        <div class="medium-6 cell small-order-2 medium-order-1" style="text-align: left">
+            <h3>Педагог дополнительного образования</h3>
+            <hr>
+            <p>Руководитель творческого объединения "Палитра" МАУДО ЦДО
+                <br>г. Владикавказа (структурного подразделения центра развития творчества детей и юношества "Нарт").
+            </p>
+            <ul>
+                <li>Окончила живописное отделение СОГУ в 2005 году.</li>
+                <li>В центре "Нарт" работаю с момента основания.</li>
+            </ul>
+            <p>У меня удивительная профессия: я открываю ребенку мир творчества и затем с удовольствием наблюдаю как из трепетного малыша,
+                впервые взявшего в непослушную ручку кисть, рождается маленький художник и творец.</p>
+            <hr>
+        </div>
+        <div class="medium-6 cell small-order-1 medium-order-2"><img class="thumbnail" src="{% static 'anna/img/about.jpg' %}"></div>
+    </div>
+</article>
+
+{% endblock %}

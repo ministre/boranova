@@ -1,0 +1,15 @@
+{% extends "main/wrapper.html" %}
+
+{% load static %}
+
+{% block content %}
+
+{% for f in fs %}
+<div class="callout" align="left">
+    <b><a href="{{ f.file.url }}">{{ f.name }}</a></b>
+    <br>
+    {% if f.desc %}{{ f.desc }}{% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}
